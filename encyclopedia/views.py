@@ -25,16 +25,6 @@ class pageForm(forms.Form):
 def index(request):
     list = util.list_entries()
 
-    #Admin mode
-    if request.user.is_authenticated:
-        return render(request, "encyclopedia/index.html", {
-        "admin": True,
-        "entries": list,
-        "value": "All pages",
-        #Support for search in side bar
-        "lists": list
-    })
-
     return render(request, "encyclopedia/index.html", {
         "entries": list,
         "value": "All pages",
@@ -54,7 +44,7 @@ def login_view(request):
         #If user is returned, login and route to index
         if user:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("encyclopedia:index"))
         #Otherwise, re-render page 
         else:
             return render(request, "encyclopedia/login.html", {
@@ -64,11 +54,20 @@ def login_view(request):
     return render(request, "encyclopedia/login.html")
 
 def logout_view(request):
-    pass
+    logout(request)
+    list = util.list_entries()
+
+    return render(request, "encyclopedia/index.html", {
+            "entries": list,
+            "value": "All pages",
+            #Support for search in side bar
+            "lists": list
+        })
 
 def showEntry_url(request, name):
     #Get entry 
     entry = util.get_entry(name)
+
     #Check existence of name
     if entry is None:
         return render(request, "encyclopedia/not_found.html", {

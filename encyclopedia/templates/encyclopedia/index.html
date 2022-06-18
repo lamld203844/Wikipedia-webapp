@@ -4,15 +4,14 @@
     Encyclopedia
 {% endblock %}
 
-{% block nav %}
-    <div>
-        <a href="{% url 'encyclopedia:login' %}">
-            Sign in
-        </a>
-    </div>
-{% endblock %}
-
 {% block body %}
+    {% if request.user.is_authenticated %}
+        <div class="alert alert-info" role="alert">
+            Admin mode. Welcome {{ request.user.first_name }}
+        </div>
+        <h1></h1>
+    {% endif %}
+
     <h1> {{ value }} </h1>
 
     <ul>

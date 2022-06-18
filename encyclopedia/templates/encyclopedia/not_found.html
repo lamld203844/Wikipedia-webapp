@@ -6,11 +6,17 @@
 
 {% block body %}
     <div class="alert alert-warning" role="alert">
-        <h4>{{ name }} </h4> does not exist!
+        <h4>{{ name }} page</h4> does not exist!
     </div>
     <h3>
-        <i>
-            <a href="{% url 'encyclopedia:create_edit' %}">Create it.</a>
-        </i>
+        {% if request.user.first_name %}
+            <a href="{% url 'encyclopedia:create_edit' %}">
+                <button type="button" class="btn btn-primary">Create it</button>
+            </a>
+        {% else %}
+            <a href="{% url 'encyclopedia:login' %}">
+                <button type="button" class="btn btn-primary">Login to create</button>
+            </a>
+        {% endif %}
     </h3>
 {% endblock %}
