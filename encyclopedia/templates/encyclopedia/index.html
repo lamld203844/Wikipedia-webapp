@@ -1,0 +1,26 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block nav %}
+    <div>
+        <a href="{% url 'encyclopedia:login' %}">
+            Sign in
+        </a>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <h1> {{ value }} </h1>
+
+    <ul>
+        {% for entry in entries %}
+            <li><a href= "/wiki/{{ entry }}">
+                {{ entry }}
+            </a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

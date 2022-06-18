@@ -1,0 +1,32 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block body %}
+    <!-- Announcing message -->
+    {% if message %}
+        {{ message }}
+    {% endif %}
+
+    <form action="{% url 'encyclopedia:login' %">
+        {% csrf_token %}
+        <div class="container"> 
+
+            <div class="col-4"></div>
+            
+            <div class="mb-3 col-6">
+                <label for="username" class="form-label">Username</label>
+                <input name="username" type="text" class="form-control" id="username" >
+            </div>
+            
+            <div class="col-4"></div>
+            
+            <div class="mb-3 col-6">
+                <label for="password" class="form-label">Password</label>
+                <input name="password" type="password" class="form-control" id="password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+            
+        </div>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Not found
+{% endblock %}
+
+{% block body %}
+    <div class="alert alert-warning" role="alert">
+        <h4>{{ name }} </h4> does not exist!
+    </div>
+    <h3>
+        <i>
+            <a href="{% url 'encyclopedia:create_edit' %}">Create it.</a>
+        </i>
+    </h3>
+{% endblock %}
