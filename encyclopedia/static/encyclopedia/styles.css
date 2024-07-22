@@ -1,7 +1,7 @@
 
 body {
     margin: 0;
-    background-color: bisque;
+    background-color: white;
 }
 
 code {
@@ -29,7 +29,7 @@ textarea {
 }
 
 .sidebar {
-    background-color: #9ebb97;
+    background-color: #aec1cc;
     height: 100vh;
     padding: 20px;
 }

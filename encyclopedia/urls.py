@@ -1,4 +1,3 @@
-from unicodedata import name
 from django.urls import path
 
 from . import views
@@ -6,8 +5,8 @@ from . import views
 app_name = "encyclopedia"
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("wiki/<str:name>", views.showEntry_url, name="show_entry"),
+    path("", views.index, name="index"), # index page
+    path("wiki/<str:name>", views.showEntry_url, name="show_entry"),  # entry page
     path("search", views.search, name="search"),
     path("create_edit", views.create_edit, name="create_edit"),
     path("wiki/<str:name>/edit",views.edit, name="edit"),

@@ -28,7 +28,7 @@ def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": list,
         "value": "All pages",
-        #Support for search in side bar
+        # Support for search in side bar
         "lists": list
     })
 
@@ -45,7 +45,7 @@ def login_view(request):
         if user:
             login(request, user)
             return HttpResponseRedirect(reverse("encyclopedia:index"))
-        #Otherwise, re-render page 
+        # Otherwise, re-render page 
         else:
             return render(request, "encyclopedia/login.html", {
                 "message": "Invalid credentials"
@@ -60,21 +60,21 @@ def logout_view(request):
     return render(request, "encyclopedia/index.html", {
             "entries": list,
             "value": "All pages",
-            #Support for search in side bar
+            # Support for search in side bar
             "lists": list
         })
 
 def showEntry_url(request, name):
-    #Get entry 
+    # Get entry 
     entry = util.get_entry(name)
 
-    #Check existence of name
+    # Check existence of name
     if entry is None:
         return render(request, "encyclopedia/not_found.html", {
             "name": name,
             "lists": util.list_entries()
         })
-    #Convert
+    # Convert
     return render(request, "encyclopedia/show_entry.html", {
         "name": name,
         "entry": markdown2.markdown(entry),
@@ -82,14 +82,14 @@ def showEntry_url(request, name):
     })
 
 def search(request):
-    #get name from searching form
+    # get name from searching form
     value = request.GET.get('q','')
-    #If NAME is exist,let's redirect with name
+    # If NAME is exist,let's redirect with name
     if(util.get_entry(value) is not None):
         return HttpResponseRedirect(reverse("encyclopedia:show_entry", kwargs={
             'name': value,
         }))
-    #If not, generating list of substring
+    # If not, generating list of substring
     else:
         sub = []
         entries = util.list_entries()
@@ -101,26 +101,34 @@ def search(request):
             "value": "Search for " + value,
             "lists": util.list_entries()
         })
+        
+## ========================================
+## When user create a new page
+## Actual saving happens in this function 
+## ========================================
+
 def create_edit(request):
-    #Check request method
+    # Check request method
     if request.method == "POST":
-        #Take in data
+        # Take in data
         form = pageForm(request.POST)
-        #Check data is valid (server side)
+        # Check data is valid (server side)
         if form.is_valid():
-            #Isolate title from "cleaned" version of title
+            # Isolate title from "cleaned" version of title
             title = form.cleaned_data["title"]
-            #Check existing
+            # Check existing
             entry_existing = False
             lists = util.list_entries()
             for list in lists:
                 if title.lower() == list.lower():
                     entry_existing = True
-            #saving form when  forms is new or editing mode 
+                    break
+                
+            # saving form when  forms is new or editing mode 
             if (entry_existing == False or form.cleaned_data["edit"] is True):
-                #Isolate content from "cleaned" version of content
+                # Isolate content from "cleaned" version of content
                 content = form.cleaned_data["content"]
-                #Saving process 
+                # Saving process 
                 util.save_entry(title,content)
                 return HttpResponseRedirect(reverse("encyclopedia:show_entry", kwargs={
                         'name': title
@@ -137,14 +145,15 @@ def create_edit(request):
                 "form": form,
                 "existed": False
             })
+            
     return render(request, "encyclopedia/create_edit.html",{
         "form": pageForm(),
         "existed": False
     })
 def edit(request, name):
-    #get existing data
+    # get existing data
     content = util.get_entry(name)
-    #if entry isn't exist
+    # if entry isn't exist
     if content is None:
         return render(request, "encyclopedia/not_found.html",{
             'name': name,
@@ -153,7 +162,7 @@ def edit(request, name):
     else:
         form = pageForm()
         form.fields["title"].initial = name
-        form.fields["title"].widget = forms.HiddenInput()
+        # form.fields["title"].widget = forms.HiddenInput()
         form.fields["content"].initial = content
         form.fields["edit"].initial = True
         return render(request, "encyclopedia/create_edit.html", {
